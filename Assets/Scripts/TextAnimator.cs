@@ -4,11 +4,26 @@ using UnityEngine.UI;
 
 public class TextAnimator : MonoBehaviour
 {
-    [SerializeField] private Text _textComponent;
-    [SerializeField] private float _duration = 2f;
+    [SerializeField] private Text _text;
+    [SerializeField] private float _duration = 3f;
+    [SerializeField] private float _interval = 2f;
+    [SerializeField] private int _loops = -1;
 
     private void Start()
     {
-        _textComponent.DOText("Новый текст", _duration);
+        Sequence sequence = DOTween.Sequence();
+
+        sequence.AppendInterval(_interval);
+        sequence.Append(_text.DOText("Сейчас происходит замена текста. ", _duration));
+
+        sequence.AppendInterval(_interval);
+        sequence.Append(_text.DOText("Это добавление к тексту.", _duration).SetRelative());
+
+        sequence.AppendInterval(_interval);
+        sequence.Append(_text.DOText("Замена всего текста с перебором.", _duration, true, ScrambleMode.All));  
+        
+        sequence.SetLoops(_loops, LoopType.Restart);
     }
 }
+
+
